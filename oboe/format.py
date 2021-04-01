@@ -30,6 +30,16 @@ def format_highlights(document):
 
     return document
 
+def format_url(document):
+    regex = re.compile(r'(?<!"|\()(http[s]*://[^\s)]*)(?<!\.)|(?<!])[(](http[s]*://[^\s)]*)')
+    matches = regex.finditer(document)
+
+    for match in matches:
+        url = match.group(1) or match.group(2)
+        document = document.replace(match.group(), f"[{url}]({url})")
+
+    return document
+
 def format_links(document, links):
     for link in links:
         document = document.replace(f"[[{link.obsidian_link}]]", link.md_link())

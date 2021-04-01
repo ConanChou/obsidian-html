@@ -2,7 +2,7 @@ import os
 import regex as re
 from oboe.utils import slug_case, md_link, render_markdown, find_tags
 from oboe.format import (
-    format_tags, format_blockrefs, format_highlights, format_embeds, format_links, format_code_blocks
+    format_tags, format_blockrefs, format_highlights, format_embeds, format_links, format_code_blocks, format_url
 )
 from oboe.Link import Link
 from oboe.Embed import Embed
@@ -83,6 +83,7 @@ class Note:
         self.content = format_tags(self.content, self.tags)
         self.content = format_blockrefs(self.content)
         self.content = format_highlights(self.content)
+        self.content = format_url(self.content)
 
     def html(self, pandoc=False):
         """Returns the note formatted as HTML. Will use markdown2 as default, with the option of pandoc (WIP)"""
