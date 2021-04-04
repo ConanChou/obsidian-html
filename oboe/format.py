@@ -31,14 +31,23 @@ def format_highlights(document):
     return document
 
 def format_url(document):
+    regex = re.compile(r'(^\s*---.*---\s*$)(.*)')
+    matches = regex.search(document, re.MULTILINE|re.DOTALL)
+    if matches:
+        front_matter = matches[0].group(1)
+        content = matches[1].group(2)
+    else:
+        front_matter = ''
+        content = document
+
     regex = re.compile(r'(?<!"|\()(http[s]*://[^\s)]*)(?<!\.)|(?<!])[(](http[s]*://[^\s)]*)')
-    matches = regex.finditer(document)
+    matches = regex.finditer(content)
 
     for match in matches:
         url = match.group(1) or match.group(2)
-        document = document.replace(match.group(), f"[{url}]({url})")
+        content = content.replace(match.group(), f"[{url}]({url})")
 
-    return document
+    return front_matter + document
 
 def format_links(document, links):
     for link in links:
